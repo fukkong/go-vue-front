@@ -6,7 +6,8 @@
       :headers="headers"
       :items="items"
       select-all
-      item-key="Vin"
+      item-key="model"
+      :pagination.sync="pagination"
     >
       <template slot="items" slot-scope="props">
         <tr>
@@ -71,6 +72,8 @@
           </v-card-action>
         </v-card>
       </v-dialog>
+      <v-btn color="primary" dark @click="deleteSelected"> -</v-btn>
+      <v-btn color="secondary" dark> Upload File</v-btn>
     </div>
   </v-app>
 </template>
@@ -81,6 +84,7 @@ export default {
   data () {
     return {
       dialog: false,
+      pagination: [],
       selected: [],
       newItem: {
         vin: '',
@@ -90,7 +94,7 @@ export default {
         msrp: '',
         status: '',
         booked: false,
-        listed: false,
+        listed: false
       },
       defaultItem: {
         vin: '',
@@ -100,7 +104,7 @@ export default {
         msrp: '',
         status: '',
         booked: false,
-        listed: false,
+        listed: false
       },
       headers: [
         { text: 'No', sortable: false },
@@ -164,10 +168,18 @@ export default {
         this.newItem = Object.assign({}, this.defaultItem)
       }, 300)
     },
-
     add () {
       this.items.push(this.newItem)
       this.close()
+    },
+    deleteSelected () {
+      for (let i = 0; i < this.selected.length; i++) {
+        const index = this.items.indexOf(this.selected[i])
+        this.items.splice(index, 1)
+        if (i === this.selected.length - 1) {
+          this.selected = []
+        }
+      }
     }
   }
 
