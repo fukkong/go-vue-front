@@ -15,19 +15,62 @@
             </v-checkbox>
           </td>
           <td>{{props.index +1}}</td>
-          <td>{{props.item.Vin}}</td>
-          <td>{{props.item.Model}}</td>
-          <td>{{props.item.Maker}}</td>
-          <td>{{props.item.Year}}</td>
-          <td>{{props.item.MSRP}}</td>
-          <td>{{props.item.Status}}</td>
-          <td>{{props.item.Booked}}</td>
-          <td>{{props.item.Listed}}</td>
+          <!-- index dont sorted-->
+          <td>{{props.item.vin}}</td>
+          <td>{{props.item.model}}</td>
+          <td>{{props.item.maker}}</td>
+          <td>{{props.item.year}}</td>
+          <td>{{props.item.msrp}}</td>
+          <td>{{props.item.status}}</td>
+          <td>{{props.item.booked}}</td>
+          <td>{{props.item.listed}}</td>
         </tr>
       </template>
     </v-data-table>
     <div>
-      + - upload
+      <v-dialog v-model="dialog" max-width="600px">
+        <v-btn slot="activator" color="primary" dark> +</v-btn>
+        <v-card>
+          <v-card-title>
+            <span class="headline">Car Profile</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Vin Number:*" v-model="newItem.vin" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Model:" v-model="newItem.model"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Maker:" v-model="newItem.maker"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Year:" v-model="newItem.year"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="MSRP:" v-model="newItem.msrp"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-select :items="['Ordered','In Stock','Sold']" label="Status:"
+                            v-model="newItem.status"></v-select>
+                </v-flex>
+                <v-flex xs6>
+                  <v-select :items="[true,false]" label="Booked:" v-model="newItem.booked"></v-select>
+                </v-flex>
+                <v-flex xs6>
+                  <v-select :items="[true,false]" label="Listed:" v-model="newItem.listed"></v-select>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-action>
+            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+            <v-btn color="blue darken-1" flat @click="add">Save</v-btn>
+          </v-card-action>
+        </v-card>
+      </v-dialog>
     </div>
   </v-app>
 </template>
@@ -37,7 +80,28 @@ export default {
   name: 'Inventory',
   data () {
     return {
+      dialog: false,
       selected: [],
+      newItem: {
+        vin: '',
+        model: '',
+        maker: '',
+        year: 0,
+        msrp: '',
+        status: '',
+        booked: false,
+        listed: false,
+      },
+      defaultItem: {
+        vin: '',
+        model: '',
+        maker: '',
+        year: 0,
+        msrp: '',
+        status: '',
+        booked: false,
+        listed: false,
+      },
       headers: [
         { text: 'No', sortable: false },
         { text: 'Vin#', align: 'left', value: 'Vin' },
@@ -51,49 +115,61 @@ export default {
       ],
       items: [
         {
-          Vin: 'MNBUMF050FW496402',
-          Model: '320i',
-          Maker: 'BMW',
-          Year: 2013,
-          MSRP: 10000,
-          Status: 'Ordered',
-          Booked: true,
-          Listed: true
+          vin: 'MNBUMF050FW496402',
+          model: '320i',
+          maker: 'BMW',
+          year: 2013,
+          msrp: 10000,
+          status: 'Ordered',
+          booked: true,
+          listed: true
         },
         {
-          Vin: '4JDBLMF080FW468775',
-          Model: 'Carmry',
-          Maker: 'Toyota',
-          Year: 2015,
-          MSRP: 12000,
-          Status: 'In stock',
-          Booked: true,
-          Listed: false
+          vin: '4JDBLMF080FW468775',
+          model: 'Carmry',
+          maker: 'Toyota',
+          year: 2015,
+          msrp: 12000,
+          status: 'In stock',
+          booked: true,
+          listed: false
         },
         {
-          Vin: 'TFBAXXMAWAFS71274',
-          Model: 'Focus',
-          Maker: 'Ford',
-          Year: 2016,
-          MSRP: 13000,
-          Status: 'Ordered',
-          Booked: false,
-          Listed: true
+          vin: 'TFBAXXMAWAFS71274',
+          model: 'Focus',
+          maker: 'Ford',
+          year: 2016,
+          msrp: 13000,
+          status: 'Ordered',
+          booked: false,
+          listed: true
         },
         {
-          Vin: 'G3SBUMF080FW470449',
-          Model: 'Civic',
-          Maker: 'Honda',
-          Year: 2016,
-          MSRP: 14000,
-          Status: 'Sold',
-          Booked: false,
-          Listed: false
+          vin: 'G3SBUMF080FW470449',
+          model: 'Civic',
+          maker: 'Honda',
+          year: 2016,
+          msrp: 14000,
+          status: 'Sold',
+          booked: false,
+          listed: false
         }
       ]
     }
   },
-  methods: {}
+  methods: {
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.newItem = Object.assign({}, this.defaultItem)
+      }, 300)
+    },
+
+    add () {
+      this.items.push(this.newItem)
+      this.close()
+    }
+  }
 
 }
 </script>
