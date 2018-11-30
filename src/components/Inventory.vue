@@ -1,33 +1,39 @@
 <template>
   <v-app>
     <h1>Inventory List</h1>
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      :items="items"
-      select-all
-      item-key="model"
-      :pagination.sync="pagination"
-    >
-      <template slot="items" slot-scope="props">
-        <tr>
-          <td>
-            <v-checkbox v-model="props.selected" primary hide-details>
-            </v-checkbox>
-          </td>
-          <td>{{props.index +1}}</td>
-          <!-- index dont sorted-->
-          <td>{{props.item.vin}}</td>
-          <td>{{props.item.model}}</td>
-          <td>{{props.item.maker}}</td>
-          <td>{{props.item.year}}</td>
-          <td>{{props.item.msrp}}</td>
-          <td>{{props.item.status}}</td>
-          <td>{{props.item.booked}}</td>
-          <td>{{props.item.listed}}</td>
-        </tr>
-      </template>
-    </v-data-table>
+    <v-card>
+      <v-card-title>
+        <v-text-field v-model="search" append-icon="search" Label="search" single-line hide-details></v-text-field>
+      </v-card-title>
+      <v-data-table
+        v-model="selected"
+        :headers="headers"
+        :items="items"
+        select-all
+        :search="search"
+        :item-key="id"
+        :pagination.sync="pagination"
+      >
+        <template slot="items" slot-scope="props">
+          <tr>
+            <td>
+              <v-checkbox v-model="props.selected" primary hide-details>
+              </v-checkbox>
+            </td>
+            <td>{{props.item.id}}</td>
+            <!-- index dont sorted-->
+            <td>{{props.item.vin}}</td>
+            <td>{{props.item.model}}</td>
+            <td>{{props.item.maker}}</td>
+            <td>{{props.item.year}}</td>
+            <td>{{props.item.msrp}}</td>
+            <td>{{props.item.status}}</td>
+            <td>{{props.item.booked}}</td>
+            <td>{{props.item.listed}}</td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-card>
     <div>
       <v-dialog v-model="dialog" max-width="600px">
         <v-btn slot="activator" color="primary" dark> +</v-btn>
@@ -66,10 +72,8 @@
               </v-layout>
             </v-container>
           </v-card-text>
-          <v-card-action>
-            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="add">Save</v-btn>
-          </v-card-action>
+          <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click="add">Save</v-btn>
         </v-card>
       </v-dialog>
       <v-btn color="primary" dark @click="deleteSelected"> -</v-btn>
@@ -83,10 +87,12 @@ export default {
   name: 'Inventory',
   data () {
     return {
+      search: '',
       dialog: false,
       pagination: [],
       selected: [],
       newItem: {
+        id: '',
         vin: '',
         model: '',
         maker: '',
@@ -97,6 +103,7 @@ export default {
         listed: false
       },
       defaultItem: {
+        id: '',
         vin: '',
         model: '',
         maker: '',
@@ -107,18 +114,19 @@ export default {
         listed: false
       },
       headers: [
-        { text: 'No', sortable: false },
-        { text: 'Vin#', align: 'left', value: 'Vin' },
-        { text: 'Model', value: 'Model' },
-        { text: 'Maker', value: 'Maker' },
-        { text: 'Year', value: 'Year' },
-        { text: 'MSRP', value: 'MSRP' },
-        { text: 'Status', value: 'Status' },
-        { text: 'Booked', value: 'Booked' },
-        { text: 'Listed', value: 'Listed' }
+        { text: 'No', value: 'id' },
+        { text: 'Vin#', align: 'left', value: 'vin' },
+        { text: 'Model', value: 'model' },
+        { text: 'Maker', value: 'maker' },
+        { text: 'Year', value: 'year' },
+        { text: 'MSRP', value: 'msrp' },
+        { text: 'Status', value: 'status' },
+        { text: 'Booked', value: 'booked' },
+        { text: 'Listed', value: 'listed' }
       ],
       items: [
         {
+          id: 1,
           vin: 'MNBUMF050FW496402',
           model: '320i',
           maker: 'BMW',
@@ -129,6 +137,7 @@ export default {
           listed: true
         },
         {
+          id: 2,
           vin: '4JDBLMF080FW468775',
           model: 'Carmry',
           maker: 'Toyota',
@@ -139,6 +148,7 @@ export default {
           listed: false
         },
         {
+          id: 3,
           vin: 'TFBAXXMAWAFS71274',
           model: 'Focus',
           maker: 'Ford',
@@ -149,6 +159,7 @@ export default {
           listed: true
         },
         {
+          id: 4,
           vin: 'G3SBUMF080FW470449',
           model: 'Civic',
           maker: 'Honda',
