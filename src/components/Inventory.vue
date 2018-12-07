@@ -20,16 +20,16 @@
               <v-checkbox v-model="props.selected" primary hide-details>
               </v-checkbox>
             </td>
-            <td>{{props.item.id}}</td>
+            <td>{{props.item.Carid}}</td>
             <!-- index dont sorted-->
-            <td>{{props.item.vin}}</td>
-            <td>{{props.item.model}}</td>
-            <td>{{props.item.maker}}</td>
-            <td>{{props.item.year}}</td>
-            <td>{{props.item.msrp}}</td>
-            <td>{{props.item.status}}</td>
-            <td>{{props.item.booked}}</td>
-            <td>{{props.item.listed}}</td>
+            <td>{{props.item.Vin}}</td>
+            <td>{{props.item.Model}}</td>
+            <td>{{props.item.Maker}}</td>
+            <td>{{props.item.Year}}</td>
+            <td>{{props.item.Msrp}}</td>
+            <td>{{props.item.Status}}</td>
+            <td>{{props.item.Booked}}</td>
+            <td>{{props.item.Listed}}</td>
           </tr>
         </template>
       </v-data-table>
@@ -45,29 +45,29 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Vin Number:*" v-model="newItem.vin" required></v-text-field>
+                  <v-text-field label="Vin Number:*" v-model="newItem.Vin" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Model:" v-model="newItem.model"></v-text-field>
+                  <v-text-field label="Model:" v-model="newItem.Model"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Maker:" v-model="newItem.maker"></v-text-field>
+                  <v-text-field label="Maker:" v-model="newItem.Maker"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Year:" v-model="newItem.year"></v-text-field>
+                  <v-text-field label="Year:" v-model="newItem.Year"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="MSRP:" v-model="newItem.msrp"></v-text-field>
+                  <v-text-field label="MSRP:" v-model="newItem.Msrp"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-select :items="['Ordered','In Stock','Sold']" label="Status:"
-                            v-model="newItem.status"></v-select>
+                            v-model="newItem.Status"></v-select>
                 </v-flex>
                 <v-flex xs6>
-                  <v-select :items="[true,false]" label="Booked:" v-model="newItem.booked"></v-select>
+                  <v-select :items="[true,false]" label="Booked:" v-model="newItem.Booked"></v-select>
                 </v-flex>
                 <v-flex xs6>
-                  <v-select :items="[true,false]" label="Listed:" v-model="newItem.listed"></v-select>
+                  <v-select :items="[true,false]" label="Listed:" v-model="newItem.Listed"></v-select>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Inventory',
   data () {
@@ -92,85 +94,53 @@ export default {
       pagination: [],
       selected: [],
       newItem: {
-        id: '',
-        vin: '',
-        model: '',
-        maker: '',
-        year: 0,
-        msrp: '',
-        status: '',
-        booked: false,
-        listed: false
+        Carid: '',
+        Vin: '',
+        Model: '',
+        Maker: '',
+        Year: 0,
+        Msrp: '',
+        Status: '',
+        Booked: false,
+        Listed: false
       },
       defaultItem: {
-        id: '',
-        vin: '',
-        model: '',
-        maker: '',
-        year: 0,
-        msrp: '',
-        status: '',
-        booked: false,
-        listed: false
+        Carid: '',
+        Vin: '',
+        Model: '',
+        Maker: '',
+        Year: 0,
+        Msrp: '',
+        Status: '',
+        Booked: false,
+        Listed: false
       },
       headers: [
-        { text: 'No', value: 'id' },
-        { text: 'Vin#', align: 'left', value: 'vin' },
-        { text: 'Model', value: 'model' },
-        { text: 'Maker', value: 'maker' },
-        { text: 'Year', value: 'year' },
-        { text: 'MSRP', value: 'msrp' },
-        { text: 'Status', value: 'status' },
-        { text: 'Booked', value: 'booked' },
-        { text: 'Listed', value: 'listed' }
+        { text: 'No', value: 'Carid' },
+        { text: 'Vin#', align: 'left', value: 'Vin' },
+        { text: 'Model', value: 'Model' },
+        { text: 'Maker', value: 'Maker' },
+        { text: 'Year', value: 'Year' },
+        { text: 'MSRP', value: 'Msrp' },
+        { text: 'Status', value: 'Status' },
+        { text: 'Booked', value: 'Booked' },
+        { text: 'Listed', value: 'Listed' }
       ],
-      items: [
-        {
-          id: 1,
-          vin: 'MNBUMF050FW496402',
-          model: '320i',
-          maker: 'BMW',
-          year: 2013,
-          msrp: 10000,
-          status: 'Ordered',
-          booked: true,
-          listed: true
-        },
-        {
-          id: 2,
-          vin: '4JDBLMF080FW468775',
-          model: 'Carmry',
-          maker: 'Toyota',
-          year: 2015,
-          msrp: 12000,
-          status: 'In stock',
-          booked: true,
-          listed: false
-        },
-        {
-          id: 3,
-          vin: 'TFBAXXMAWAFS71274',
-          model: 'Focus',
-          maker: 'Ford',
-          year: 2016,
-          msrp: 13000,
-          status: 'Ordered',
-          booked: false,
-          listed: true
-        },
-        {
-          id: 4,
-          vin: 'G3SBUMF080FW470449',
-          model: 'Civic',
-          maker: 'Honda',
-          year: 2016,
-          msrp: 14000,
-          status: 'Sold',
-          booked: false,
-          listed: false
-        }
-      ]
+      items: [],
+      errors: []
     }
+  },
+  created () {
+    axios.get('http://localhost:8080/v1/car')
+      .then(function (response) {
+        let list = []
+        Object.keys(response.data).forEach((key) => {
+          list.push(response.data[key])
+        })
+        return list
+      }).then((list) => {
+        this.items = list
+      })
   },
   methods: {
     close () {
