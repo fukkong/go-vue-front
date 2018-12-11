@@ -130,18 +130,22 @@ export default {
     }
   },
   created () {
-    axios.get('http://localhost:8080/v1/car')
-      .then(function (response) {
-        let list = []
-        Object.keys(response.data).forEach((key) => {
-          list.push(response.data[key])
-        })
-        return list
-      }).then((list) => {
-        this.items = list
-      })
+    this.refresh()
   },
   methods: {
+    refresh () {
+      axios.get('http://localhost:8080/v1/car')
+        .then(function (response) {
+          let list = []
+          Object.keys(response.data).forEach((key) => {
+            list.push(response.data[key])
+          })
+          return list
+        })
+        .then((list) => {
+          this.items = list
+        })
+    },
     close () {
       this.dialog = false
       setTimeout(() => {
@@ -149,16 +153,22 @@ export default {
       }, 300)
     },
     add () {
-      this.items.push(this.newItem)
-      this.close()
+      axios.post('http://localhost:8080/v1/car', this.newItem)
+        .then(() => {
+          this.refresh()
+          this.close()
+        })
     },
     deleteSelected () {
       for (let i = 0; i < this.selected.length; i++) {
-        const index = this.items.indexOf(this.selected[i])
-        this.items.splice(index, 1)
-        if (i === this.selected.length - 1) {
-          this.selected = []
-        }
+        const index = this.selected[i]['Carid']
+        axios.delete('http://localhost:8080/v1/car/' + index)
+          .then(() => {
+            if (i === this.selected.length - 1) {
+              this.selected = []
+              this.refresh()
+            }
+          })
       }
     }
   }
