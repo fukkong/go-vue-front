@@ -11,7 +11,7 @@
         :items="items"
         select-all
         :search="search"
-        :item-key="id"
+        item-key="Carid"
         :pagination.sync="pagination"
       >
         <template slot="items" slot-scope="props">
@@ -21,7 +21,6 @@
               </v-checkbox>
             </td>
             <td>{{props.item.Carid}}</td>
-            <!-- index dont sorted-->
             <td>{{props.item.Vin}}</td>
             <td>{{props.item.Model}}</td>
             <td>{{props.item.Maker}}</td>
@@ -91,7 +90,7 @@ export default {
     return {
       search: '',
       dialog: false,
-      pagination: [],
+      pagination: {},
       selected: [],
       newItem: {
         Carid: '',

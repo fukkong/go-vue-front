@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navication-drawer fixed>
+    <v-navigation-drawer fixed>
       <v-list dense>
         <v-list-tile>
           <v-list-tile-title class="title">
@@ -23,7 +23,7 @@
 
         </v-list-tile>
       </v-list>
-    </v-navication-drawer>
+    </v-navigation-drawer>
   </v-app>
 </template>
 
