@@ -11,7 +11,7 @@
         :items="items"
         select-all
         :search="search"
-        item-key="Carid"
+        item-key="id"
         :pagination.sync="pagination"
       >
         <template slot="items" slot-scope="props">
@@ -20,15 +20,15 @@
               <v-checkbox v-model="props.selected" primary hide-details>
               </v-checkbox>
             </td>
-            <td>{{props.item.Carid}}</td>
-            <td>{{props.item.Vin}}</td>
-            <td>{{props.item.Model}}</td>
-            <td>{{props.item.Maker}}</td>
-            <td>{{props.item.Year}}</td>
-            <td>{{props.item.Msrp}}</td>
-            <td>{{props.item.Status}}</td>
-            <td>{{props.item.Booked}}</td>
-            <td>{{props.item.Listed}}</td>
+            <td>{{props.item.id}}</td>
+            <td>{{props.item.vin}}</td>
+            <td>{{props.item.model}}</td>
+            <td>{{props.item.maker}}</td>
+            <td>{{props.item.year}}</td>
+            <td>{{props.item.msrp}}</td>
+            <td>{{props.item.status}}</td>
+            <td>{{props.item.booked}}</td>
+            <td>{{props.item.listed}}</td>
           </tr>
         </template>
       </v-data-table>
@@ -44,29 +44,29 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Vin Number:*" v-model="newItem.Vin" required></v-text-field>
+                  <v-text-field label="Vin Number:*" v-model="newItem.vin" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Model:" v-model="newItem.Model"></v-text-field>
+                  <v-text-field label="Model:" v-model="newItem.model"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Maker:" v-model="newItem.Maker"></v-text-field>
+                  <v-text-field label="Maker:" v-model="newItem.maker"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Year:" v-model="newItem.Year"></v-text-field>
+                  <v-text-field label="Year:" v-model="newItem.year" type="number"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="MSRP:" v-model="newItem.Msrp"></v-text-field>
+                  <v-text-field label="MSRP:" v-model="newItem.msrp" type="number"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-select :items="['Ordered','In Stock','Sold']" label="Status:"
-                            v-model="newItem.Status"></v-select>
+                            v-model="newItem.status"></v-select>
                 </v-flex>
                 <v-flex xs6>
-                  <v-select :items="[true,false]" label="Booked:" v-model="newItem.Booked"></v-select>
+                  <v-select :items="[true,false]" label="Booked:" v-model="newItem.booked"></v-select>
                 </v-flex>
                 <v-flex xs6>
-                  <v-select :items="[true,false]" label="Listed:" v-model="newItem.Listed"></v-select>
+                  <v-select :items="[true,false]" label="Listed:" v-model="newItem.listed"></v-select>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -93,37 +93,37 @@ export default {
       pagination: {},
       selected: [],
       newItem: {
-        Carid: '',
-        Vin: '',
-        Model: '',
-        Maker: '',
-        Year: 0,
-        Msrp: '',
-        Status: '',
-        Booked: false,
-        Listed: false
+        id: '',
+        vin: '',
+        model: '',
+        maker: '',
+        year: 0,
+        msrp: 0,
+        status: '',
+        booked: false,
+        listed: false
       },
       defaultItem: {
-        Carid: '',
-        Vin: '',
+        id: '',
+        vin: '',
         Model: '',
-        Maker: '',
-        Year: 0,
-        Msrp: '',
-        Status: '',
-        Booked: false,
-        Listed: false
+        maker: '',
+        year: 0,
+        msrp: 0,
+        status: '',
+        booked: false,
+        listed: false
       },
       headers: [
-        { text: 'No', value: 'Carid' },
+        { text: 'No', value: 'id' },
         { text: 'Vin#', align: 'left', value: 'Vin' },
-        { text: 'Model', value: 'Model' },
-        { text: 'Maker', value: 'Maker' },
-        { text: 'Year', value: 'Year' },
-        { text: 'MSRP', value: 'Msrp' },
-        { text: 'Status', value: 'Status' },
-        { text: 'Booked', value: 'Booked' },
-        { text: 'Listed', value: 'Listed' }
+        { text: 'Model', value: 'model' },
+        { text: 'Maker', value: 'maker' },
+        { text: 'Year', value: 'year' },
+        { text: 'MSRP', value: 'msrp' },
+        { text: 'Status', value: 'status' },
+        { text: 'Booked', value: 'booked' },
+        { text: 'Listed', value: 'listed' }
       ],
       items: [],
       errors: []
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     refresh () {
-      axios.get('http://localhost:8080/v1/car')
+      axios.get('http://gorestapi-env.rfjpibz9mu.ap-northeast-2.elasticbeanstalk.com//cars')
         .then(function (response) {
           let list = []
           Object.keys(response.data).forEach((key) => {
@@ -153,7 +153,7 @@ export default {
       }, 300)
     },
     add () {
-      axios.post('http://localhost:8080/v1/car', this.newItem)
+      axios.post('http://gorestapi-env.rfjpibz9mu.ap-northeast-2.elasticbeanstalk.com/cars', this.newItem)
         .then(() => {
           this.refresh()
           this.close()
@@ -161,8 +161,8 @@ export default {
     },
     deleteSelected () {
       for (let i = 0; i < this.selected.length; i++) {
-        const index = this.selected[i]['Carid']
-        axios.delete('http://localhost:8080/v1/car/' + index)
+        const index = this.selected[i]['id']
+        axios.delete('http://gorestapi-env.rfjpibz9mu.ap-northeast-2.elasticbeanstalk.com//cars/' + index)
           .then(() => {
             if (i === this.selected.length - 1) {
               this.selected = []
